@@ -1,3 +1,5 @@
+Merci de créer des branches qui évoquent ce sur quoi vous travaillez qu'on ne se perde pas dans les fonctionnalités.
+
 Pour que le jeu puisse se lancer installer:
 
 ```sudo apt-get install libsdl2-image-2.0-0```
