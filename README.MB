@@ -1,0 +1,20 @@
+Pour que le jeu puisse se lancer installer:
+
+```sudo apt-get install libsdl2-image-2.0-0```
+```sudo apt-get install libsdl2-image-dev```
+
+Lancement du server :
+./bomberman server [port]
+
+Lancement du client :
+./bomberman client [adresse ip] [port]
+
+Extended quoi faire :
+-Changer la map
+-Vérifier que la connexion depuis différentes machines fonctionnent
+-Optimiser le code (propre, enlever le code inutile, rajouter des commentaires pour les fonctions)
+-Vérifier la connexion à 4 joueurs (et si le problème vient de la ram ou non)
+-Optimisation de la ram
+-Créer des launches .exe .deb
+-Lancement sous windows
+-Système de MAJ avec des nouveaux paquets
