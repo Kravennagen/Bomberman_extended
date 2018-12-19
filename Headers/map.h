@@ -14,11 +14,11 @@ enum e_map_flag {
 void	map_init(char*);
 char	map_get(char*, int y, int x);
 void	map_set(char*, int y, int x, char val);
-int	map_cell_burning(char cell);
-int	map_is_wall(char cell);
-int	map_is_breakable_wall(char cell);
-int	map_has_bomb(char cell);
-int	map_has_bonus(char cell);
-int	map_get_bonus(char cell);
+int		map_cell_burning(char cell);
+int		map_is_wall(char cell);
+int		map_is_breakable_wall(char cell);
+int		map_has_bomb(char cell);
+int		map_has_bonus(char cell);
+int		map_get_bonus(char cell);
 
 #endif

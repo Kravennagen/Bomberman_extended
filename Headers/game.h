@@ -4,8 +4,8 @@
 #include "bomberman.h"
 #include "server.h"
 
-void  game_process(t_server*, t_client_request*, int userIndex);
+void	game_process(t_server*, t_client_request*, int userIndex);
 void	game_tick(t_game*);
 void	game_init_players(t_game*);
-void  bomb_things(t_game* game);
+void	bomb_things(t_game* game);
 #endif
