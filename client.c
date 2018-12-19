@@ -112,7 +112,7 @@ void	client(char* host, int port)
 			}
 			if (game_is_finish(game, userIndex))
 				break;
-			while (SDL_PollEvent(&event))
+			while (SDL_PollEvent(&event)){
 				if (!handle_event(&event, sockfd, game->players + userIndex))
 					return; /* user exited */
 				display(SDL_GetWindowSurface(pWindow), game/*, game->players + userIndex*/);
@@ -120,6 +120,7 @@ void	client(char* host, int port)
 				if (SDL_UpdateWindowSurface(pWindow) < 0)
 					ERR_MSG("Unable to update window surface\n");
 			}
+		}
 		if (!game->players[userIndex].alive){
 			printf("You are dead you lose\n");
 			win_display();
