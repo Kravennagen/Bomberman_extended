@@ -2,6 +2,9 @@
 #include "Headers/display.h"
 #include "Headers/map.h"
 
+/*
+
+*/
 static SDL_Rect* sdlh_rect(int x, int y, int w, int h) {
 	SDL_Rect* rect;
 
@@ -15,6 +18,9 @@ static SDL_Rect* sdlh_rect(int x, int y, int w, int h) {
 	return rect;
 }
 
+/*
+
+*/
 static t_tile get_tile(t_game *game, int x, int y)
 {
   	t_tile ret = {16, 208}; /* grass tile */
@@ -36,6 +42,9 @@ static t_tile get_tile(t_game *game, int x, int y)
 	return ret;
 }
 
+/*
+
+*/
 static SDL_Surface *getSpriteMap(void)
 {
 	static SDL_Surface *spriteMap;
@@ -51,6 +60,9 @@ static SDL_Surface *getSpriteMap(void)
 	return spriteMap;
 }
 
+/*
+
+*/
 void	display(SDL_Surface *screen, t_game *game/*, t_player_info *player*/)
 {
 	for (int y = 0; y < MAP_COL; ++y)

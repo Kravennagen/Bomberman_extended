@@ -1,7 +1,9 @@
 #include <SDL.h>
 #include "Headers/win_lose.h"
 
-
+/*
+Display image if a player wins
+*/
 int	win_display(){
 	int quit = 1;
 	SDL_Event event;
@@ -42,7 +44,9 @@ int	win_display(){
 	return 0;
 }
 
-
+/*
+Display image if a player loses
+*/
 int	lose_display(){
 	int quit = 1;
 	SDL_Event event;

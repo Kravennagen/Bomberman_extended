@@ -6,6 +6,10 @@
 #include "Headers/map.h"
 #include "Headers/game.h"
 
+
+/*
+
+*/
 static void	bind_clients(t_server *server)
 {
 	printf("Binding clients (total %d)\n", MAX_PLAYERS);
@@ -52,6 +56,9 @@ static int	handle_client(t_server *server, fd_set *readfs, int userIndex)
 	return (1);
 }
 
+/*
+
+*/
 static void*	game_start(void* _server)
 {
 	t_server *server = _server;
@@ -84,6 +91,9 @@ static void*	game_start(void* _server)
 	return NULL;
 }
 
+/*
+
+*/
 //Configure server socket
 static int  prepare_server(t_server* server)
 {
@@ -101,6 +111,9 @@ static int  prepare_server(t_server* server)
 	return (1);
 }
 
+/*
+
+*/
 int	server(int port)
 {
 	t_server server;

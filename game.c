@@ -1,6 +1,9 @@
 #include "Headers/game.h"
 #include "Headers/map.h"
 
+/*
+
+*/
 static void move_player(t_game *game, int userIndex, int y, int x)
 {
 	t_player_info *player = game->players + userIndex;
@@ -16,6 +19,9 @@ static void move_player(t_game *game, int userIndex, int y, int x)
 	player->x_pos = x;
 }
 
+/*
+
+*/
 void game_process(t_server *server, t_client_request *req, int userIndex)
 {
 	t_player_info *player = server->game.players + userIndex;
@@ -65,6 +71,9 @@ void game_process(t_server *server, t_client_request *req, int userIndex)
 	}
 }
 
+/*
+
+*/
 void game_tick(t_game *game)
 {
 	for (int i = 0; i < MAP_SIZE; ++i)
@@ -76,6 +85,9 @@ void game_tick(t_game *game)
 	bomb_things(game);
 }
 
+/*
+
+*/
 void bomb_things(t_game *game)
 {
 
@@ -140,6 +152,9 @@ void bomb_things(t_game *game)
 	}
 }
 
+/*
+
+*/
 void game_init_players(t_game *game)
 {
 	game->bomb = NULL;

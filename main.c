@@ -4,6 +4,9 @@
 #include "Headers/client.h"
 #include "Headers/server.h"
 
+/*
+
+*/
 int	main(int argc, char** argv)
 {
 	if (argc == 4 && !strcmp(argv[1], "client"))

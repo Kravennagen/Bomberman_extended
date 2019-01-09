@@ -8,6 +8,10 @@
 #include "Headers/map.h"
 #include "Headers/display.h"
 
+
+/*
+Allow player to connect themself to the server
+*/
 int connect_to_server(const char* addr, int port)
 {
 	int sockfd;
@@ -28,7 +32,9 @@ int connect_to_server(const char* addr, int port)
 	return (sockfd);
 }
 
-
+/*
+Handle events like quit or an event from the player to send it to the handle_action function
+*/
 static int handle_event(SDL_Event* event, int sockfd, t_player_info* infos)
 {
 	if (event->type == SDL_QUIT)
@@ -38,6 +44,10 @@ static int handle_event(SDL_Event* event, int sockfd, t_player_info* infos)
 	return (1);
 }
 
+
+/*
+Create the game's window
+*/
 static SDL_Window	*window(void)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -56,6 +66,9 @@ static SDL_Window	*window(void)
 	return (pWindow);
 }
 
+/*
+
+*/
 static t_game*  read_game(int sockfd)
 {
 	char* buffer = malloc(sizeof(t_game));
@@ -74,7 +87,9 @@ static t_game*  read_game(int sockfd)
 		return (t_game*)buffer;
 	}
 
-
+/*
+Check if the game is finish or not, check the life from the total player
+*/
 int	game_is_finish(t_game *game, int userIndex)
 	{
 		int total_alive = 0;
@@ -89,6 +104,9 @@ int	game_is_finish(t_game *game, int userIndex)
 		}
 	}
 
+/*
+
+*/
 void	client(char* host, int port)
 	{
 		t_game  *game;

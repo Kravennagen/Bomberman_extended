@@ -2,6 +2,10 @@
 #include <sys/time.h>
 #include "Headers/client_actions.h"
 
+
+/*
+Handle action from player
+*/
 void handle_action(SDL_KeyboardEvent* key, int sockfd, t_player_info* infos)
 {
   (void)infos; /* might not be necessary */

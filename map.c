@@ -1,6 +1,9 @@
 #include <string.h>
 #include "Headers/map.h"
 
+/*
+
+*/
 void	map_init(char* map)
 {
 	memset(map, 0, MAP_SIZE);
@@ -21,41 +24,65 @@ void	map_init(char* map)
 	}
 }
 
+/*
+
+*/
 char	map_get(char* map, int y, int x)
 {
 	return map[x + y * (MAP_ROW)];
 }
 
+/*
+
+*/
 void	map_set(char* map, int y, int x, char val)
 {
 	map[x + y * (MAP_ROW)] = val;
 }
 
+/*
+
+*/
 int	map_cell_burning(char cell)
 {
 	return (cell & map_flag_burning);
 }
 
+/*
+
+*/
 int	map_is_wall(char cell)
 {
 	return (cell & map_flag_wall);
 }
 
+/*
+
+*/
 int map_is_breakable_wall(char cell)
 {
 	return map_is_wall(cell) && (cell & map_flag_breakable_wall);
 }
 
+/*
+
+*/
 int map_has_bomb(char cell)
 {
 	return (cell & map_flag_bomb);
 }
 
+/*
+
+*/
 int map_has_bonus(char cell)
 {
 	return (cell & map_flag_bonus);
 }
 
+/*
+
+*/
 int	map_get_bonus(char cell)
 {
 	/* return 3 LSBs */
