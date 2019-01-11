@@ -111,7 +111,7 @@ void	client(char* host, int port)
 	{
 		t_game  *game;
 		int sockfd = connect_to_server(host, port);
-		SDL_Window* pWindow = window();
+		SDL_Window *pWindow = window();
 		if (!pWindow)
 			return;
 
@@ -140,10 +140,12 @@ void	client(char* host, int port)
 			}
 		}
 		if (!game->players[userIndex].alive){
+			
 			printf("You are dead you lose\n");
 			win_display();
 		}
 		else{
+			
 			printf("You win\n GG WP\n");
 			lose_display();
 		}

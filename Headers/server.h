@@ -9,7 +9,7 @@
 
 int	server(int host);
 
-typedef union s_server {
+typedef struct s_server {
         pthread_t tid;
         t_game	game;
         int	fds[MAX_PLAYERS];
