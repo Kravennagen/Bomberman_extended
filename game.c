@@ -91,7 +91,7 @@ void game_tick(t_game *game)
 void bomb_things(t_game *game)
 {
 	
-	/*t_bomb *temp_bomb = game->bomb;
+	t_bomb *temp_bomb = game->bomb;
 	t_bomb *temp_bomb_free = game->bomb;
 	
 	while (temp_bomb != NULL)
@@ -149,7 +149,7 @@ void bomb_things(t_game *game)
 			temp_bomb = temp_bomb->next;
 			free(temp_bomb_free);
 		}
-	}*/
+	}
 }
 
 /*

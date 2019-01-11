@@ -92,9 +92,8 @@ static void*	game_start(void* _server)
 }
 
 /*
-
+Configure server socket
 */
-//Configure server socket
 static int  prepare_server(t_server* server)
 {
 	server->len = sizeof(struct sockaddr);
