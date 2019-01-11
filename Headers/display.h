@@ -6,9 +6,11 @@
 
 void	display(SDL_Surface *screen, t_game *game/*, t_player_info *player*/);
 
+#pragma pack(2)
+
 typedef struct s_tile {
   int x;
   int y;
-} t_tile;
+}     t_tile;
 
 #endif

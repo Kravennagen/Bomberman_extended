@@ -18,9 +18,10 @@
 /* to usleep() for server, to throttle for client. 100000 = 0.1s */
 #define SOCKET_TIME_BETWEEN 100000
 
-typedef struct s_bomb t_bomb;
+#pragma pack(2)
+typedef union s_bomb t_bomb;
 
-typedef struct  s_client_request
+typedef union  s_client_request
 {
         unsigned int  magic;                  /* Un magic number commun entre le client et le serveur, ou l'identifiant d'un type de structure */
         int           x_pos;                  /* La position x souhait?e par le client */
@@ -29,9 +30,9 @@ typedef struct  s_client_request
         int           command;                /* Une commande du client (0 : Ne rien faire / 1 : Poser une bombe) */
         int           speed;                  /* La vitesse du joueur */
         int           ckecksum;               /* Un checksum simple */
-}t_client_request;
+}               t_client_request;
 
-typedef struct s_player_info
+typedef union s_player_info
 {
         char  connected;
         char  alive;
@@ -47,21 +48,21 @@ typedef struct s_player_info
 
 typedef char t_map[MAP_SIZE];
 
-typedef struct s_bomb
+typedef union s_bomb
 {
 	double	ticks_left;
 	int y;
 	int x;
 	t_bomb*	prev;
 	t_bomb*	next;
-}s_bomb;
+}               s_bomb;
 
-typedef struct          s_game
+typedef union s_game
 {
         t_player_info        players[MAX_PLAYERS];
         t_map                map;
 	t_bomb* bomb;
-}t_game;
+}               t_game;
 
 
 /*

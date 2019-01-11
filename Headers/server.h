@@ -5,9 +5,11 @@
 #include "main.h"
 #include "bomberman.h"
 
+#pragma pack(2)
+
 int	server(int host);
 
-typedef struct s_server {
+typedef union s_server {
         pthread_t tid;
         t_game	game;
         int	fds[MAX_PLAYERS];
@@ -17,6 +19,6 @@ typedef struct s_server {
         int sockfd;
         int port;
         int running;
-} t_server;
+}           t_server;
 
 #endif
