@@ -47,17 +47,17 @@ static t_tile get_tile(t_game *game, int x, int y)
 */
 static SDL_Surface *getSpriteMap(void)
 {
-	static SDL_Surface *spriteMap;
-	if (!spriteMap)
-	{
-		spriteMap = IMG_Load("Images/bomb_party_v4.png");
-		if (!spriteMap)
-		{
-			fprintf(stderr, "error loading sprite map : '%s'\n", IMG_GetError());
-			exit(1);
-		}
-	}
-	return spriteMap;
+  static SDL_Surface *spriteMap;
+  if (!spriteMap)
+  {
+    spriteMap = IMG_Load("Images/bomb_party_v4.png");
+    if (!spriteMap)
+    {
+      fprintf(stderr, "error loading sprite map : '%s'\n", IMG_GetError());
+      exit(1);
+    }
+  }
+  return spriteMap;
 }
 
 /*
