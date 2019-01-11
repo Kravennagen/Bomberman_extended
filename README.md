@@ -21,3 +21,6 @@ Extended quoi faire :<br>
 -Créer des launches .exe .deb<br>
 -Lancement sous windows<br>
 -Système de MAJ avec des nouveaux paquets<br>
+<br><br>
+<strong>Pragma Pack</strong>
+Permet de réduire la taille des structures. Lire cette réponse pour mieux comprendre : https://stackoverflow.com/a/3318475/10760673
