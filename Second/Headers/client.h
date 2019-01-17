@@ -28,15 +28,15 @@ enum e_map_flag {
 void	map_init(char*);
 char	map_get(char*, int y, int x);
 void	map_set(char*, int y, int x, char val);
-int	map_cell_burning(char cell);
-int	map_is_wall(char cell);
-int map_is_breakable_wall(char cell);
-int map_has_bomb(char cell);
-int map_has_bonus(char cell);
-int	map_get_bonus(char cell);
-void handle_action(SDL_KeyboardEvent* key, int sockfd, t_player_info* infos);
+int		map_cell_burning(char cell);
+int		map_is_wall(char cell);
+int 	map_is_breakable_wall(char cell);
+int 	map_has_bomb(char cell);
+int 	map_has_bonus(char cell);
+int		map_get_bonus(char cell);
+void 	handle_action(SDL_KeyboardEvent* key, int sockfd, t_player_info* infos);
 void	client(char* host, int port);
-int	game_is_finish(t_game *game, int userIndex);
+int		game_is_finish(t_game *game, int userIndex);
 void	display(SDL_Surface *screen, t_game *game/*, t_player_info *player*/);
 
 #endif

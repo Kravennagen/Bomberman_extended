@@ -11,8 +11,8 @@
 #include <unistd.h>
 
 #define MAX_PLAYERS 2
-#define MAP_COL 9 /* y | */
-#define MAP_ROW 9 /* x --- */
+#define MAP_COL 50 /* y | */
+#define MAP_ROW 50 /* x --- */
 #define MAP_SIZE (MAP_COL * MAP_ROW)
 #define TILE_HEIGHT 16 /* y */
 #define TILE_WIDTH 16 /* x */
@@ -32,7 +32,7 @@ typedef struct s_bomb
         t_bomb* next;
 }s_bomb;
 
-typedef union s_player_info
+typedef struct s_player_info
 {
         char  connected;
         char  alive;
