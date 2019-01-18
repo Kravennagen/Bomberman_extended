@@ -13,7 +13,7 @@ Lancement du server :<br>
 Lancement du client :<br>
 ./bomberman client [adresse ip] [port]<br>
 
-Topo du call
+Topo du call<br>
 -Modifier le server pour qu'il soit en réseau (actuellement on est toujours en 127.0.0.1)<br>
 -Faire les audits avant/après pour les optimisations (RAM pour nous, et donc les photos postées plus haut)<br>
 -Portabilité windows & linux (Nada est sur windows, faut se mettre aussi sur le .deb ou .rpm) Pas de cygwin pour windows<br>
