@@ -1,5 +1,5 @@
-#include <string.h>
-#include "Headers/map.h"
+#include "Headers/bomberman.h"
+#include "Headers/client.h"
 
 void	map_init(char* map)
 {

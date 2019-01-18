@@ -1,12 +1,5 @@
-#include <SDL.h>
-#include <errno.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include "Headers/err.h"
+#include "Headers/bomberman.h"
 #include "Headers/client.h"
-#include "Headers/client_actions.h"
-#include "Headers/map.h"
-#include "Headers/display.h"
 
 int connect_to_server(const char* addr, int port)
 {
@@ -38,7 +31,7 @@ static int handle_event(SDL_Event* event, int sockfd, t_player_info* infos)
   return (1);
 }
 
-static SDL_Window	*window(void)
+static SDL_Window *window(void)
 {
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
@@ -75,21 +68,25 @@ static t_game*  read_game(int sockfd)
 }
 
 
-int	game_is_finish(t_game *game, int userIndex)
+int game_is_finish(t_game *game, int userIndex)
 {
   int total_alive = 0;
+  if(!game->players[userIndex].connected)
+  {
+    return 1;
+  }
   if (game->players[userIndex].alive) {
     for (int i = 0; i < MAX_PLAYERS; i++)
       {
-	total_alive += game->players[i].alive;
+        total_alive += game->players[i].alive;
       }
-    return total_alive == 1;
+    return total_alive <= 1;
   } else {    
     return 1;
   }
 }
 
-void	client(char* host, int port)
+void  client(char* host, int port)
 {
   t_game  *game;
   int sockfd = connect_to_server(host, port);
@@ -120,12 +117,8 @@ void	client(char* host, int port)
     if (SDL_UpdateWindowSurface(pWindow) < 0)
       ERR_MSG("Unable to update window surface\n");
   }
-  if (!game->players[userIndex].alive){
+  if (!game->players[userIndex].alive)
     printf("You are dead you lose\n");
-	win_display();
-	}
-  else{
+  else
     printf("You win\n GG WP\n");
-	lose_display();
-	}
 }

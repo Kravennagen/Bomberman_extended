@@ -1,8 +1,5 @@
-#include <SDL.h>
 #include "Headers/bomberman.h"
-#include "Headers/main.h"
 #include "Headers/client.h"
-#include "Headers/server.h"
 
 int	main(int argc, char** argv)
 {

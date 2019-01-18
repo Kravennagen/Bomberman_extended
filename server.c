@@ -1,10 +1,5 @@
-#include <errno.h>
-#include <unistd.h>
-#include "Headers/err.h"
-#include "Headers/server.h"
+#include "Headers/bomberman.h"
 #include "Headers/client.h"
-#include "Headers/map.h"
-#include "Headers/game.h"
 
 static void	bind_clients(t_server *server)
 {
@@ -77,9 +72,19 @@ static void*	game_start(void* _server)
 				return NULL;
 		game_tick(&server->game);
 		for (int i = 0; i < MAX_PLAYERS; ++i)
-			write(server->fds[i], &server->game, sizeof server->game);
-		usleep(100);
-		//nanosleep(100);
+		  {
+			if(server->game.players[i].connected)
+			{
+			    if (server->game.players[i].alive)
+					write(server->fds[i], &server->game, sizeof server->game);
+				else
+				{
+					server->game.players[i].connected = 0;
+					write(server->fds[i], &server->game, sizeof server->game);
+				}
+			}
+		  }
+			sleep(0.1);
 	}
 	return NULL;
 }
@@ -107,7 +112,7 @@ int	server(int port)
 	void* discard_return;
 
 	server.running = 1;
-	server.port = port;
+  server.port = port;
 
 	if (!prepare_server(&server))
 		return (1);
