@@ -38,56 +38,42 @@ typedef struct s_player_info
         char  alive;
         int   x_pos;
         int   y_pos;
-        int   current_dir;
-        int   current_speed;
-        int   max_speed;
         int   bombs_left;
-        int   bombs_capacity;
-        int   frags;
 }               t_player_info;
 
 typedef struct  s_client_request
 {
-        unsigned int  magic;                  /* Un magic number commun entre le client et le serveur, ou l'identifiant d'un type de structure */
         int           x_pos;                  /* La position x souhait?e par le client */
         int           y_pos;                  /* La position y souhait?e par le client */
-        int           dir;                    /* La direction souhait?e par le client */
         int           command;                /* Une commande du client (0 : Ne rien faire / 1 : Poser une bombe) */
-        int           speed;                  /* La vitesse du joueur */
-        int           ckecksum;               /* Un checksum simple */
 }t_client_request;
 
 typedef char t_map[MAP_SIZE];
 
 typedef struct  s_game
 {
-        t_player_info        players[MAX_PLAYERS];
-        t_map                map;
-        t_bomb* bomb;
+        t_player_info           players[MAX_PLAYERS];
+        t_map                   map;
+        t_bomb*                 bomb;
 }t_game;
 
 typedef struct s_server {
-        pthread_t tid;
-        t_game  game;
-        int     fds[MAX_PLAYERS];
+        pthread_t               tid;
+        t_game                  game;
+        int                     fds[MAX_PLAYERS];
         struct sockaddr_in      sock_serv;
-        struct sockaddr *sock_ptr;
-        socklen_t       len;
-        int sockfd;
-        int port;
-        int running;
+        struct sockaddr         *sock_ptr;
+        socklen_t               len;
+        int                     sockfd;
+        int                     port;
+        int                     running;
 } t_server;
 
-typedef enum {
-        OPTION_QUIT,
-        OPTION_HOST,
-        OPTION_JOIN,
-} menu_option;
 
-void  game_process(t_server*, t_client_request*, int userIndex);
+void    game_process(t_server*, t_client_request*, int userIndex);
 void    game_tick(t_game*);
 void    game_init_players(t_game*);
-void  bomb_things(t_game* game);
+void    bomb_things(t_game* game);
 int     server(int host);
 
 #endif
