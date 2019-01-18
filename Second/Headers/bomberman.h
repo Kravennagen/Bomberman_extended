@@ -11,8 +11,8 @@
 #include <unistd.h>
 
 #define MAX_PLAYERS 4
-#define MAP_COL 50 /* y | */
-#define MAP_ROW 50 /* x --- */
+#define MAP_COL 45 /* y | */
+#define MAP_ROW 45 /* x --- */
 #define MAP_SIZE (MAP_COL * MAP_ROW)
 #define TILE_HEIGHT 16 /* y */
 #define TILE_WIDTH 16 /* x */
