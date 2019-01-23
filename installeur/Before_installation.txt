@@ -1,0 +1,2 @@
+Ce programme installe le test SDL_image
+L'executable devrait lancer une fenetre avec une image
