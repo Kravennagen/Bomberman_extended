@@ -15,9 +15,6 @@ int connect_to_server(const char* addr, int port)
   serv.sin_addr.s_addr = inet_addr(addr);
   if (-1 == connect(sockfd, (struct sockaddr*)&serv, sizeof serv))
     ERR_MSG("Connect returned -1. errno=%d\n", errno);
-  int flags = fcntl(sockfd, F_GETFL, 0);
-  if (fcntl(sockfd, F_SETFL, flags | O_NONBLOCK))
-    ERR_MSG("Unable to set client sockfd to nonblocking. errno=%d\n", errno);
   return (sockfd);
 }
 

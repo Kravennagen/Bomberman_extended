@@ -6,12 +6,10 @@ static void	bind_clients(t_server *server)
 	printf("Binding clients (total %d)\n", MAX_PLAYERS);
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		/* TODO check whether a client disconnected */
 		server->fds[i] = -1;
 		while (-1 == server->fds[i])
 			server->fds[i] = accept(server->sockfd, server->sock_ptr,
 					&server->len);
-		/* send user id */
 		write(server->fds[i], &i, sizeof i);
 		printf("Connected player #%d\n", i + 1);
 	}
@@ -47,7 +45,13 @@ static int	handle_client(t_server *server, fd_set *readfs, int userIndex)
 	return (1);
 }
 
-static void*	game_start(void* _server)
+static
+#ifdef _WIN32
+void
+#else
+void*
+#endif
+game_start(void* _server)
 {
 	t_server *server = _server;
 	struct timeval	tv;
@@ -56,12 +60,16 @@ static void*	game_start(void* _server)
 	bind_clients(server);
 	map_init(server->game.map);
 	game_init_players(&server->game);
-	while (server->running) /* TODO mutex (to read an int?) */
+	while (server->running)
 	{
 		FD_ZERO(&readfs);
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 			if (-1 == server->fds[i])
-				return NULL;
+                #ifdef _WIN32
+                    return;
+                #else
+                    return NULL;
+                #endif
 			else
 				FD_SET(server->fds[i], &readfs);
 		tv.tv_sec = tv.tv_usec = 0;
@@ -69,10 +77,14 @@ static void*	game_start(void* _server)
 		/* read actions for each player */
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 			if (server->fds[i] > 0 && !handle_client(server, &readfs, i))
-				return NULL;
+				#ifdef _WIN32
+                    return;
+                #else
+                    return NULL;
+                #endif
 		game_tick(&server->game);
 		for (int i = 0; i < MAX_PLAYERS; ++i)
-		  {
+	    {
 			if(server->game.players[i].connected)
 			{
 			    if (server->game.players[i].alive)
@@ -83,28 +95,90 @@ static void*	game_start(void* _server)
 					write(server->fds[i], &server->game, sizeof server->game);
 				}
 			}
-		  }
-			sleep(0.1);
+		}
+		sleep(0.1);
 	}
-	return NULL;
+
+	#ifdef _WIN32
+        return;
+    #else
+        return NULL;
+    #endif
 }
 
 //Configure server socket
 static int  prepare_server(t_server* server)
 {
-	server->len = sizeof(struct sockaddr);
-	server->sock_ptr = (struct sockaddr*)&server->sock_serv;
-	server->sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (-1 == server->sockfd)
-		ERR_MSG("server sockfd is -1\n");
-	server->sock_serv.sin_family = AF_INET;
-	server->sock_serv.sin_port = htons(server->port);
-	server->sock_serv.sin_addr.s_addr = INADDR_ANY;
-	if (-1 == bind(server->sockfd, server->sock_ptr, server->len))
-		ERR_MSG("could not bind, errno=%d\n", errno);
-	listen(server->sockfd, MAX_PLAYERS);
-	return (1);
+	server->len = sizeof(server->sock_serv);
+    server->sock_ptr = (struct sockaddr*)&server->sock_serv;
+    server->sockfd = socket(AF_INET, SOCK_STREAM, 0);
+#ifdef _WIN32
+    if (INVALID_SOCKET == server->sockfd)
+        ERR_MSG("sockfd is INVALID_SOCKET: %d\n", WSAGetLastError());
+#else
+    if (-1 == server->sockfd)
+        ERR_MSG("sockfd is -1\n");
+#endif
+    server->sock_serv.sin_family = AF_INET;
+    server->sock_serv.sin_port = htons(server->port);
+    server->sock_serv.sin_addr.s_addr = INADDR_ANY;
+    if (
+#ifdef _WIN32
+        INVALID_SOCKET
+#else
+        -1
+#endif
+            == bind(server->sockfd, server->sock_ptr, server->len))
+        ERR_MSG("could not bind, errno=%d\n", errno);
+#ifdef _WIN32
+    u_long mode = 1; /* nonblocking mode */
+    ioctlsocket(server->sockfd, FIONBIO, &mode);
+#endif
+    listen(server->sockfd, MAX_PLAYERS);
+    return (1);
 }
+
+#ifdef _WIN32
+struct windows_thread_wrapper
+{
+    thread_fn fn;
+    void* data;
+};
+
+/* wraps the thread function to return 0 */
+static unsigned __stdcall wrap_thread_create(void* tw)
+{
+    struct windows_thread_wrapper* w = tw;
+    w->fn(w->data);
+    free(tw);
+    return 0;
+}
+
+void thread_create(thread_t* t, thread_fn fn, void* data)
+{
+    struct windows_thread_wrapper *tw;
+    tw = malloc(sizeof *tw);
+    if (!tw)
+        ERR_MSG("Unable to alloc thread wrapper");
+    tw->fn = fn;
+    tw->data = data;
+    *t = (HANDLE)_beginthreadex(
+            NULL /* security */,
+            0 /* stack size */,
+            wrap_thread_create,
+            tw,
+            0 /* initflag */,
+            NULL /* thread id */
+    );
+    if (0 == *t)
+    ERR_MSG("Unable to _beginthreadex");
+}
+
+void thread_join(thread_t tid)
+{
+    WaitForSingleObject(tid, INFINITE);
+}
+#endif
 
 int	server(int port)
 {
@@ -112,14 +186,24 @@ int	server(int port)
 	void* discard_return;
 
 	server.running = 1;
-  server.port = port;
+    server.port = port;
 
 	if (!prepare_server(&server))
 		return (1);
-	pthread_create(&server.tid, NULL, game_start, &server);
-	client("127.0.0.1", server.port);
 
-	server.running = 0; /* TODO mutex */
-	pthread_join(server.tid, &discard_return);
+	#ifdef _WIN32
+		thread_create(&server.tid, game_start, &server);
+		client("127.0.0.1", server.port);
+
+		server.running = 0;
+		thread_join(server.tid);
+    #else
+    	pthread_create(&server.tid, NULL, game_start, &server);
+    	client("127.0.0.1", server.port);
+
+    	server.running = 0; /* TODO mutex */
+    	pthread_join(server.tid, &discard_return);
+	#endif
+
 	return (0);
 }
