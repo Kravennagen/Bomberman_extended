@@ -1,0 +1,81 @@
+ dpkg-buildpackage -rfakeroot -D -us -uc
+dpkg-buildpackage: source package bomberman
+dpkg-buildpackage: source version 2.0-1
+dpkg-buildpackage: source distribution UNRELEASED
+dpkg-buildpackage: source changed by Nada <mesrat_n@etna-alternance.net>
+ dpkg-source --before-build bomberman-2.0
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean
+   dh_testdir
+   dh_auto_clean
+	make -j1 clean
+make[1]: Entering directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+rm -rf display.o client.o game.o client_actions.o main.o server.o map.o
+make[1]: Leaving directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+   dh_clean
+ dpkg-source -b bomberman-2.0
+dpkg-source: info: using source format '3.0 (quilt)'
+dpkg-source: info: building bomberman using existing ./bomberman_2.0.orig.tar.gz
+dpkg-source: info: building bomberman in bomberman_2.0-1.debian.tar.xz
+dpkg-source: info: building bomberman in bomberman_2.0-1.dsc
+ debian/rules build
+dh build
+   dh_testdir
+   dh_update_autotools_config
+   dh_auto_configure
+   dh_auto_build
+	make -j1
+make[1]: Entering directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o display.o display.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o client.o client.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o game.o game.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o client_actions.o client_actions.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o main.o main.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o server.o server.c
+cc -D _DEFAULT_SOURCE --std=c11 `sdl2-config --cflags` -g -Wdate-time -D_FORTIFY_SOURCE=2  -c -o map.o map.c
+cc -o bomberman display.o client.o game.o client_actions.o main.o server.o map.o `sdl2-config --libs` -lSDL2_image -lpthread
+make[1]: Leaving directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary
+   dh_testroot
+   dh_prep
+   dh_installdirs
+   debian/rules override_dh_auto_install
+make[1]: Entering directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+/usr/bin/make DESTDIR=$(pwd)/debian/bomberman prefix=/usr install
+make[2]: Entering directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+install bomberman /home/nada/Documents/deb_bomberman/bomberman-2.0/debian/bomberman/usr/bin
+install bomberman.1 /home/nada/Documents/deb_bomberman/bomberman-2.0/debian/bomberman/usr/share/man/man1
+make[2]: Leaving directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+make[1]: Leaving directory '/home/nada/Documents/deb_bomberman/bomberman-2.0'
+   dh_installdocs
+   dh_installchangelogs
+   dh_installman
+   dh_perl
+   dh_link
+   dh_strip_nondeterminism
+   dh_compress
+   dh_fixperms
+   dh_strip
+   dh_makeshlibs
+   dh_shlibdeps
+   dh_installdeb
+   dh_gencontrol
+   dh_md5sums
+   dh_builddeb
+dpkg-deb: building package 'bomberman' in '../bomberman_2.0-1_amd64.deb'.
+ dpkg-genchanges  >../bomberman_2.0-1_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source --after-build bomberman-2.0
+dpkg-buildpackage: full upload (original source is included)
+Now running lintian...
+E: bomberman source: source-is-missing bomberman
+W: bomberman source: package-needs-versioned-debhelper-build-depends 10
+W: bomberman source: ancient-standards-version 3.9.2 (current is 3.9.7)
+W: bomberman: wrong-bug-number-in-closes l3:#XXXXXX
+W: bomberman: new-package-should-close-itp-bug
+E: bomberman: extended-description-is-empty
+W: bomberman: manpage-section-mismatch usr/share/man/man1/bomberman.1.gz:2 1 != 21
+Finished running lintian.

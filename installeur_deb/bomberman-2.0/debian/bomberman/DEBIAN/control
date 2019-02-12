@@ -1,0 +1,9 @@
+Package: bomberman
+Version: 2.0-1
+Architecture: amd64
+Maintainer: Nada MESRATI <mesrat_n@etna-alternance.net>
+Installed-Size: 31
+Depends: libc6 (>= 2.4), libsdl2-2.0-0 (>= 2.0.4), libsdl2-image-2.0-0 (>= 2.0.1)
+Section: misc
+Priority: optional
+Description: Play bomberman game.

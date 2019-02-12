@@ -1,0 +1,31 @@
+Format: 1.8
+Date: Thu, 07 Feb 2019 17:33:12 +0100
+Source: bomberman
+Binary: bomberman
+Architecture: source amd64
+Version: 2.0-1
+Distribution: UNRELEASED
+Urgency: medium
+Maintainer: Nada MESRATI <mesrat_n@etna-alternance.net>
+Changed-By: Nada <mesrat_n@etna-alternance.net>
+Description:
+ bomberman  - Play bomberman game.
+Changes:
+ bomberman (2.0-1) UNRELEASED; urgency=medium
+ .
+   * Initial release. (Closes: #XXXXXX)
+Checksums-Sha1:
+ fee9a0a67cb172f5cb6596e00f4c390d37c419c8 853 bomberman_2.0-1.dsc
+ b6e4eac9dc33205695c54df9e1d8b4fa75b71a05 38728 bomberman_2.0.orig.tar.gz
+ 3034eb41c814e4e04acc0270036681a74f2d9df6 856 bomberman_2.0-1.debian.tar.xz
+ 07f3e9e004cc97621207a2d01213b511f6f1fbae 7696 bomberman_2.0-1_amd64.deb
+Checksums-Sha256:
+ 33ef5e1954cbf85776b1c0e15bbc60b84267d5149ee0fdce41c0c70b5f7a3330 853 bomberman_2.0-1.dsc
+ 9e6d53ff5767b15434b438361617a742c8d87ab911ea94bef068ccd863e8040d 38728 bomberman_2.0.orig.tar.gz
+ e50a53f68d1923119140aef0f9c60580b3595561753f4660c7bb5f2705afcace 856 bomberman_2.0-1.debian.tar.xz
+ 5f6ab9b03be3db32a83f4b7265a57e293601ae5b841c992ef05ce38353e54252 7696 bomberman_2.0-1_amd64.deb
+Files:
+ 23c460af08a4154ef43f5cc3ddfbc44d 853 misc optional bomberman_2.0-1.dsc
+ f9d4182a7c0e82e1176f7481edeb96b7 38728 misc optional bomberman_2.0.orig.tar.gz
+ f2cbb53b631f44886110a02c9ff2f312 856 misc optional bomberman_2.0-1.debian.tar.xz
+ 76df74be5ec7e7eba95a1fbd84255cf0 7696 misc optional bomberman_2.0-1_amd64.deb

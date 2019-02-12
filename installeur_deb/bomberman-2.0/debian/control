@@ -1,0 +1,11 @@
+Source: bomberman
+Maintainer: Nada MESRATI <mesrat_n@etna-alternance.net>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>=9), libsdl2-image-dev, libsdl2-2.0-0, libsdl2-image-2.0-0, libsdl2-mixer-2.0-0
+
+Package: bomberman
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Play bomberman game.
