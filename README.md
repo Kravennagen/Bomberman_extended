@@ -13,6 +13,12 @@ Lancement du server :<br>
 Lancement du client :<br>
 ./bomberman client [adresse ip] [port]<br>
 
+Pour debian<br>
+```sudo dpkg -i ../bomberman_2.0-1_amd64.deb```<br>
+
+Pour windows <br>
+
+
 Topo du call<br>
 -Modifier le server pour qu'il soit en réseau (actuellement on est toujours en 127.0.0.1)<br>
 -Faire les audits avant/après pour les optimisations (RAM pour nous, et donc les photos postées plus haut)<br>
