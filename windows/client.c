@@ -1,21 +1,43 @@
 #include "bomberman.h"
 #include "client.h"
 
-int connect_to_server(const char* addr, int port)
+#ifdef _WIN32
+SOCKET
+#else
+int
+#endif
+ connect_to_server(const char* addr, int port)
 {
-  int sockfd;
+  #ifdef _WIN32
+    SOCKET sockfd;
+  #else
+    int sockfd;
+  #endif
   struct sockaddr_in serv;
 
   printf("Connecting to %s:%i\n", addr, port);
-  sockfd = socket(AF_INET, SOCK_STREAM, 0); 
-  if (sockfd < 0)
-    ERR_MSG("Could not open socket, sockfd=%d\n", sockfd);
+  sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  #ifdef _WIN32
+    if (INVALID_SOCKET == sockfd)
+      ERR_MSG("Could not open socket, er==\n", WSAGetLastError());
+  #else
+    if (sockfd < 0)
+      ERR_MSG("Could not open socket, sockfd=%d\n", sockfd);
+  #endif 
   serv.sin_family = AF_INET;
   serv.sin_port = htons(port);
   serv.sin_addr.s_addr = inet_addr(addr);
-  if (-1 == connect(sockfd, (struct sockaddr*)&serv, sizeof serv))
-    ERR_MSG("Connect returned -1. errno=%d\n", errno);
-  return (sockfd);
+
+  #ifdef _WIN32
+    if (SOCKET_ERROR == connect(sockfd, (SOCKADDR*)&serv, sizeof serv))
+      ERR_MSG("Connect returned while trying to connect to %s:%d -1. errno=%d\n", addr, port, WSAGetLastError());
+    return sockfd;
+  #else
+    if (-1 == connect(sockfd, (struct sockaddr*)&serv, sizeof serv))
+      ERR_MSG("Connect returned -1. errno=%d\n", errno);
+    return (sockfd);
+  #endif
+
 }
 
 
@@ -28,14 +50,8 @@ static int handle_event(SDL_Event* event, int sockfd, t_player_info* infos)
   return (1);
 }
 
-static SDL_Window *window(void)
+SDL_Window *window(void)
 {
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
-  {
-    fprintf(stdout, "SDL init error: %s", SDL_GetError());
-    return (NULL);
-  }
-
   SDL_Window* pWindow = NULL;
   pWindow = SDL_CreateWindow("Bomberman", SDL_WINDOWPOS_UNDEFINED,
       SDL_WINDOWPOS_UNDEFINED,
@@ -53,7 +69,12 @@ static t_game*  read_game(int sockfd)
   size_t left = sizeof(t_game);
   while (left > 0)
   {
-    int count = read(sockfd, buffLeft, left);
+    #ifdef _WIN32
+      int count = recv(sockfd, buffLeft, left, 0);
+    #else
+      int count = read(sockfd, buffLeft, left);
+    #endif    
+    
     if (count == -1 && errno == EAGAIN)
       continue; /* try again */
     if (count == 0)
@@ -86,14 +107,27 @@ int game_is_finish(t_game *game, int userIndex)
 void  client(char* host, int port)
 {
   t_game  *game;
-  int sockfd = connect_to_server(host, port);
+  #ifdef _WIN32
+    SOCKET sockfd = connect_to_server(host, port);
+  #else
+    int sockfd = connect_to_server(host, port);
+  #endif
+
   SDL_Window* pWindow = window();
   if (!pWindow)
     return;
 
   int userIndex = 0, readSize;
-  if ((readSize = read(sockfd, &userIndex, sizeof userIndex)) < (long)sizeof userIndex)
-    ERR_MSG("Unable to read user index. errno=%d,size=%d\n", errno, readSize);
+  printf("Logging in...\n");
+
+  #ifdef _WIN32
+    if ((readSize = recv(sockfd, (char *)&userIndex, sizeof userIndex, 0)) < (long)sizeof userIndex)
+      ERR_MSG("Unable to read user index. errno=%d,size=%d\n", errno, readSize);
+  #else
+    if ((readSize = read(sockfd, &userIndex, sizeof userIndex)) < (long)sizeof userIndex)
+      ERR_MSG("Unable to read user index. errno=%d,size=%d\n", errno, readSize);
+  #endif
+
   printf("Logged in as player #%d\n", userIndex);
   SDL_Event event;
   while (1)
@@ -101,7 +135,7 @@ void  client(char* host, int port)
     game = read_game(sockfd);
     if (!game)
     {
-      sleep(1);
+      sleep(0.5);
       continue;
     }
     if (game_is_finish(game, userIndex))

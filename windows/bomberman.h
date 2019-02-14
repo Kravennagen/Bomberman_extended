@@ -14,6 +14,7 @@
     #include <stdint.h>
     #include <WS2tcpip.h>
     typedef int socklen_t;
+    typedef SOCKET socket_holder;
     typedef HANDLE thread_t;
     typedef void(*thread_fn)(void* data);
 #else
@@ -32,7 +33,11 @@
 #define MAP_SIZE (MAP_COL * MAP_ROW)
 #define TILE_HEIGHT 16 /* y */
 #define TILE_WIDTH 16 /* x */
-#define BOMB_TICKS 1500
+#ifdef _WIN32
+    #define BOMB_TICKS 20
+#else
+    #define BOMB_TICKS 1500 /*50000 pour 0.1 rapide sans explosion*/
+#endif
 #define ERR_MSG(...) { fprintf(stderr, __VA_ARGS__); exit(1); }
 
 typedef struct s_bomb t_bomb;
@@ -69,7 +74,7 @@ typedef struct  s_client_request
     int           command;                /* Une commande du client (0 : Ne rien faire / 1 : Poser une bombe) */
     int           speed;                  /* La vitesse du joueur */
     int           ckecksum;               /* Un checksum simple */
-}t_client_request;
+}               t_client_request;
 
 typedef char t_map[MAP_SIZE];
 
@@ -84,8 +89,8 @@ typedef struct s_server {
     thread_t tid;
     t_game  game;
     int     fds[MAX_PLAYERS];
-    struct sockaddr_in      sock_serv;
     struct sockaddr *sock_ptr;
+    struct sockaddr_in      sock_serv;
     socklen_t       len;
     #ifdef _WIN32
         SOCKET sockfd;

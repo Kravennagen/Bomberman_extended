@@ -23,6 +23,7 @@ enum e_map_flag {
 	map_flag_bonus = 0x08,
 };
 
+SDL_Window *window(void);
 void	map_init(char*);
 char	map_get(char*, int y, int x);
 void	map_set(char*, int y, int x, char val);

@@ -30,6 +30,6 @@ void handle_action(SDL_KeyboardEvent* key, int sockfd, t_player_info* infos)
       req = NULL;
   }
   if (req)
-    write(sockfd, (char*)req, sizeof *req);
+    send(sockfd, (char*)req, sizeof *req, 0);
   free(req);
 }

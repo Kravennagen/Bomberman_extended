@@ -59,7 +59,6 @@ void  display(SDL_Surface *screen, t_game *game/*, t_player_info *player*/)
     {
       t_tile tile = get_tile(game, x, y);
 
-      //fprintf(stdout, "tile draw %d %d=%d, drawing tile at x=%d,y=%d\n", y, x, x + y * MAP_ROW, tile.x, tile.y);
       SDL_BlitSurface(
         getSpriteMap(),
         sdlh_rect(rect, tile.x, tile.y, TILE_WIDTH, TILE_HEIGHT),

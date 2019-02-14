@@ -10,7 +10,11 @@ static void	bind_clients(t_server *server)
 		while (-1 == server->fds[i])
 			server->fds[i] = accept(server->sockfd, server->sock_ptr,
 					&server->len);
-		write(server->fds[i], &i, sizeof i);
+		#ifdef _WIN32
+			send(server->fds[i], (const char *)&i, sizeof i, 0);
+		#else
+			write(server->fds[i], &i, sizeof i, 0);
+		#endif
 		printf("Connected player #%d\n", i + 1);
 	}
 }
@@ -30,7 +34,11 @@ static int	handle_client(t_server *server, fd_set *readfs, int userIndex)
 		char *buffLeft = buffer;
 		while (left > 0)
 		{
-			int count = read(sockfd, buffer, left);
+			#ifdef _WIN32
+		      int count = recv(sockfd, buffLeft, left, 0);
+		    #else
+		      int count = read(sockfd, buffLeft, left);
+		    #endif   
 			if (count == 0)
 			{
 				FD_CLR(sockfd, readfs);
@@ -87,16 +95,24 @@ game_start(void* _server)
 	    {
 			if(server->game.players[i].connected)
 			{
-			    if (server->game.players[i].alive)
-					write(server->fds[i], &server->game, sizeof server->game);
-				else
+			    if (server->game.players[i].alive) {
+			    	#ifdef _WIN32
+						send(server->fds[i], (const char*)&server->game, sizeof server->game, 0);
+					#else
+						write(server->fds[i], &server->game, sizeof server->game);
+					#endif
+				} else
 				{
 					server->game.players[i].connected = 0;
-					write(server->fds[i], &server->game, sizeof server->game);
+					#ifdef _WIN32
+						send(server->fds[i], (const char*)&server->game, sizeof server->game, 0);
+					#else
+						write(server->fds[i], &server->game, sizeof server->game);
+					#endif
 				}
 			}
 		}
-		sleep(0.1);
+		sleep(1);
 	}
 
 	#ifdef _WIN32
@@ -109,8 +125,14 @@ game_start(void* _server)
 //Configure server socket
 static int  prepare_server(t_server* server)
 {
+	server->sock_serv.sin_family = AF_INET;
+#ifdef _WIN32
+    server->sock_serv.sin_port = htons((u_short) server->port);
+#else
+    server->sock_serv.sin_port = htons(server->port);
+#endif
+    server->sock_serv.sin_addr.s_addr = INADDR_ANY;
 	server->len = sizeof(server->sock_serv);
-    server->sock_ptr = (struct sockaddr*)&server->sock_serv;
     server->sockfd = socket(AF_INET, SOCK_STREAM, 0);
 #ifdef _WIN32
     if (INVALID_SOCKET == server->sockfd)
@@ -119,9 +141,8 @@ static int  prepare_server(t_server* server)
     if (-1 == server->sockfd)
         ERR_MSG("sockfd is -1\n");
 #endif
-    server->sock_serv.sin_family = AF_INET;
-    server->sock_serv.sin_port = htons(server->port);
-    server->sock_serv.sin_addr.s_addr = INADDR_ANY;
+    server->sock_ptr = (struct sockaddr*)&server->sock_serv;
+
     if (
 #ifdef _WIN32
         INVALID_SOCKET
@@ -180,6 +201,7 @@ void thread_join(thread_t tid)
 }
 #endif
 
+SDL_Window *window(void);
 int	server(int port)
 {
 	t_server server;
@@ -187,6 +209,7 @@ int	server(int port)
 
 	server.running = 1;
     server.port = port;
+    window();
 
 	if (!prepare_server(&server))
 		return (1);
