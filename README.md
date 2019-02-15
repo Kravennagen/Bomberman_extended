@@ -28,3 +28,6 @@ Topo du call<br>
 
 <strong>Pragma Pack</strong>
 Permet de réduire la taille des structures. Lire cette réponse pour mieux comprendre : https://stackoverflow.com/a/3318475/10760673<br>
+
+Pour compiler sous windows : 
+gcc -o bomberman.exe *.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lws2_32
