@@ -1,0 +1,5 @@
+Ce programme installe le jeu Bomberman
+L'executable devrait se lancer depuis une console de commande.
+Usage : 
+./bomberman.exe server port
+./bomberman.exe client ip port
